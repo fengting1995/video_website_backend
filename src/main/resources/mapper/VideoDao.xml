@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rf.dao.VideoDao">
+    
+    <resultMap id="BaseResultMap" type="com.rf.model.VideoModel">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="type_id1" jdbcType="INTEGER" property="typeId1"/>
+        <result column="type_id2" jdbcType="VARCHAR" property="typeId2"/>
+        <result column="update_time" jdbcType="INTEGER" property="updateTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="picture" jdbcType="VARCHAR" property="picture"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="av" jdbcType="VARCHAR" property="av"/>
+        <result column="lang" jdbcType="VARCHAR" property="lang"/>
+        <result column="area" jdbcType="VARCHAR" property="area"/>
+        <result column="year" jdbcType="VARCHAR" property="year"/>
+        <result column="actor" jdbcType="VARCHAR" property="actor"/>
+        <result column="director" jdbcType="VARCHAR" property="director"/>
+    </resultMap>
+    
+    <sql id="BaseColumnList">
+        `id`,type_id1,type_id2,`name`,picture,content,av,update_time,lang,area,`year`,actor,director
+    </sql>
+    
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="BaseColumnList"/>
+            from video
+            where id = #{id,jdbcType=INTEGER}
+    </select>
+    
+    <select id="selectByTypeIdWithLimit" resultMap="BaseResultMap">
+        select <include refid="BaseColumnList"></include>
+            from video
+            where type_id1 = #{typeId} or type_id2 = #{typeId} order by id desc limit #{limit}
+    </select>
+
+
+    <select id="selectByAv" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select <include refid="BaseColumnList"></include>
+            from video
+            where av = #{av}
+
+    </select>
+
+<!--    这个不错，有学习意义-->
+    <select id="selectTotalByQueryParam" parameterType="com.rf.param.VideoQueryParam" resultType="int">
+        select count(0) from video
+        <where>
+            <if test="kw != null">
+                and name like concat('%',#{kw},'%')
+            </if>
+            <if test="typeId != null">
+                and type_id1 = #{typeId} or type_id2 = #{typeId}
+            </if>
+        </where>
+    </select>
+
+<!--    if里面的test没漏加videoQueryParam. 但外面的漏了-->
+    <select id="selectByQuery" resultMap="BaseResultMap">
+        select <include refid="BaseColumnList"></include> from video
+        <where>
+            <if test="videoQueryParam.kw != null">
+                and name like concat('%',#{videoQueryParam.kw},'%')
+            </if>
+            <if test="videoQueryParam.typeId != null">
+                and type_id1 = #{videoQueryParam.typeId} or type_id2 = #{videoQueryParam.typeId}
+            </if>
+        </where>
+        order by id desc limit #{offset},#{limit}
+    </select>
+    
+    <select id="selectFuzzyByName" parameterType="string" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumnList"></include> FROM video
+        <where>
+            <if test="name != null">
+                name LIKE CONCAT('%', #{name}, '%') limit #{limit}
+            </if>
+        </where>
+    </select>
+
+
+
+</mapper>

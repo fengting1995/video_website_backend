@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.rf.dao.VideoLinkDao">
+    <resultMap id="BaseResultMap" type="com.rf.model.VideoLinkModel">
+        <id column="id" jdbcType="INTEGER" property="id"></id>
+        <result column="video_id" jdbcType="INTEGER" property="videoId"></result>
+        <result column="from_name" jdbcType="VARCHAR" property="fromName"></result>
+        <result column="play_name" jdbcType="VARCHAR" property="playName"></result>
+        <result column="play_url" jdbcType="VARCHAR" property="playUrl"></result>
+    </resultMap>
+
+    <sql id="BaseColumList">
+        `id`,video_id,from_name,play_name,play_url
+    </sql>
+
+    <select id="selectByVideoId" resultMap="BaseResultMap">
+        select <include refid="BaseColumList"></include>
+            from video_link
+            where video_id = #{videoId}
+    </select>
+
+</mapper>

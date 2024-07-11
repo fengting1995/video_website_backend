@@ -1,0 +1,32 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+collection:
+   url: http://127.0.0.1:8888
+#  url: http://localhost:8888
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/tanmu_video?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+#    url: jdbc:mysql://112.74.186.207:3306/tanmu_video?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+
+  redis:
+    port: 6379
+    host: 127.0.0.1
+#    host: 112.74.186.207
+    database: 0
+    prefix: 'tanmu::'
+    expired-seconds: 72000
+
+
+logging:
+  level:
+    root: info
+    com.video.tanmu.dao: debug
+  file:
+    name: log.log
+    path: /ruanfeng/video_website_backend
